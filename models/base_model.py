@@ -65,6 +65,6 @@ class BaseModel:
         :return: A dictionary representation the object
         """
         my_dict = self.__dict__
-        my_dict.update({"__class__": type(self).__name__})
-        my_dict['created_at'] = my_dict['created_at'].isoformat()
-        my_dict['updated_at'] = my_dict['updated_at'].isoformat()
+        my_dict["__class__"] = type(self).__name__
+        my_dict["created_at"] = my_dict["created_at"].isoformat()
+        my_dict["updated_at"] = my_dict["updated_at"].isoformat()

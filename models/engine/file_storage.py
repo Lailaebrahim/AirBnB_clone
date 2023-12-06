@@ -17,14 +17,14 @@ class FileStorage:
     """
 
     __file_path = "file.json"
-    __object = {}
+    __objects = {}
 
     def all(self):
         """
         A Method to return the dictionary __objects
         :return: returns the dictionary __objects
         """
-        return FileStorage.__object
+        return FileStorage.__objects
 
     def new(self, obj):
         """
@@ -33,7 +33,7 @@ class FileStorage:
         :return: No return
         """
         key = f"{type(obj).__name__}.{obj.id}"
-        FileStorage.__object[key] = obj
+        FileStorage.__objects[key] = obj
 
     def save(self):
         """
@@ -44,13 +44,15 @@ class FileStorage:
         Then added to a key/value dictionary where each value is the
         dictionary representation of the obj referred to by its key
         then using json.dump to store it in a json file as a json string
-        :return:
-        """
-        with open(FileStorage.__file_path, 'w', encoding="utf-8") as json_file:
-            dic = {}
+
             for key, value in FileStorage.__object.items():
                 dic[key] = value.to_dict()
-            json.dump(dic, json_file)
+                json.dump(dic, json_file)
+        :return:
+        """
+        with open(FileStorage.__file_path, 'w', encoding="utf-8") as f:
+            d = {k: v.to_dict() for k, v in FileStorage.__objects.items()}
+            json.dump(d, f)
 
     def classes(self):
         """
