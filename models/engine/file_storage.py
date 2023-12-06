@@ -44,15 +44,13 @@ class FileStorage:
         Then added to a key/value dictionary where each value is the
         dictionary representation of the obj referred to by its key
         then using json.dump to store it in a json file as a json string
-
-            for key, value in FileStorage.__object.items():
-                dic[key] = value.to_dict()
-                json.dump(dic, json_file)
         :return:
         """
-        with open(FileStorage.__file_path, 'w', encoding="utf-8") as f:
-            d = {k: v.to_dict() for k, v in FileStorage.__objects.items()}
-            json.dump(d, f)
+        with open(FileStorage.__file_path, 'w', encoding="utf-8") as json_file:
+            dic = {}
+            for key, value in FileStorage.__objects.items():
+                dic[key] = value.to_dict()
+            json.dump(dic, json_file)
 
     def classes(self):
         """

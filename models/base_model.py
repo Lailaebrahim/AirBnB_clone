@@ -64,7 +64,7 @@ class BaseModel:
         And formatting the created_at and updated_at by ISO format for time.
         :return: A dictionary representation the object
         """
-        my_dict = self.__dict__
+        my_dict = self.__dict__.copy()
         my_dict["__class__"] = type(self).__name__
         my_dict["created_at"] = my_dict["created_at"].isoformat()
         my_dict["updated_at"] = my_dict["updated_at"].isoformat()
