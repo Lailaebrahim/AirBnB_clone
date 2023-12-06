@@ -21,15 +21,19 @@ class BaseModel:
             created_at and updated_at vale is a string of
             time formatted with ISO, so we need to convert it back
             to datetime object
+            datetime.fromisoformat(kwargs["created_at"])
+
         :param args: A tuple of arguments.
         :param kwargs: A dictionary of key/value arguments.
         """
         if kwargs is not None and kwargs != {}:
             for key in kwargs:
                 if key == "created_at":
-                    self.__dict__["created_at"] = datetime.fromisoformat(kwargs["created_at"])
+                    self.__dict__["created_at"] = datetime.strptime(
+                        kwargs["created_at"], "%Y-%m-%dT%H:%M:%S.%f")
                 elif key == "updated_at":
-                    self.__dict__["updated_at"] = datetime.fromisoformat(kwargs["updated_at"])
+                    self.__dict__["updated_at"] = datetime.strptime(
+                        kwargs["created_at"], "%Y-%m-%dT%H:%M:%S.%f")
                 else:
                     self.__dict__[key] = kwargs[key]
 
