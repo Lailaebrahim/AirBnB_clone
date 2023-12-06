@@ -32,7 +32,7 @@ class FileStorage:
         :param obj: New Objected created
         :return: No return
         """
-        key = f"{type(obj).__name}.{obj.id}"
+        key = f"{type(obj).__name__}.{obj.id}"
         FileStorage.__object[key] = obj
 
     def save(self):

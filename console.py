@@ -36,7 +36,7 @@ class HBNBCommand(cmd.Cmd):
         :param line: A string for the parameters given to the command.
         :return: No return
         """
-        if line in storage.classes().values():
+        if line in storage.classes():
             obj = storage.classes()[line]()
             obj.save()
             print(obj.id)
