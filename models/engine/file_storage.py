@@ -86,15 +86,17 @@ class FileStorage:
         value of key:__class__ in dict representation by referencing class
         giving it it's dict representation as an argument
         (corresponds to **kwargs)
+                        for key, value in obj_dic.items():
+                    obj_dic[key] = self.classes()[value["__class__"]](**value)
      :return: No return
         """
         if os.path.isfile(FileStorage.__file_path):
-            with open(FileStorage.__file_path, "r", encoding="utf-8") as file:
-                obj_dic = json.load(file)
-                for key, value in obj_dic.items():
-                    obj_dic[key] = self.classes()[value["__class__"]](**value)
+            with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
+                obj_dict = json.load(f)
+                obj_dict = {k: self.classes()[v["__class__"]](**v)
+                            for k, v in obj_dict.items()}
                 # TODO: should this overwrite or insert?
-                FileStorage.__objects = obj_dic
+                FileStorage.__objects = obj_dict
 
         else:
             return
