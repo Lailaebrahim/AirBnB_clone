@@ -85,7 +85,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             if args[0] in storage.classes():
                 if len(args) < 2:
-                    print( "** instance id missing **" )
+                    print("** instance id missing **")
                 else:
                     key = f"{args[0]}.{args[1]}"
                     if key in storage.all():
@@ -95,6 +95,38 @@ class HBNBCommand(cmd.Cmd):
                         print("** no instance found **")
             else:
                 print("** class doesn't exist **")
+
+    def do_update(self, line):
+        """Update command to update attribute of an instance."""
+        args = line.split(" ")
+        if line == "" or line is None:
+            print("** class name missing **")
+        else:
+            if args[0] not in storage.classes():
+                print("** class doesn't exist **")
+            else:
+                if len(args) < 2:
+                    print("** instance id missing **")
+                else:
+                    key = f"{args[0]}.{args[1]}"
+                    if key not in storage.all():
+                        print("** no instance found **")
+                    else:
+                        if len(args) < 3:
+                            print("** attribute name missing **")
+                        else:
+                            if len(args) < 4:
+                                print("** value missing **")
+                            else:
+                                for classes_key, attributes_dict in storage.attributes().items():
+                                    for attributes_key, attribute_type in attributes_dict.items():
+                                        if args[2] == attributes_key:
+                                            try:
+                                                args[3] = attribute_type(args[3])
+                                            except ValueError:
+                                                pass
+                                setattr(storage.all()[key], args[2], args[3])
+                                storage.all()[key].save()
 
 
 if __name__ == '__main__':
