@@ -66,13 +66,13 @@ class HBNBCommand(cmd.Cmd):
         listt = []
         if len(args) < 2:
             for key, value in objs.items():
-                listt.append(objs[key])
-            print( listt )
+                listt.append(str(objs[key]))
+            print(listt)
         else:
             if args[1] in storage.classes():
                 for key, value in objs.items():
                     if value["__class__"] == args[0]:
-                        listt.append(objs[key])
+                        listt.append(str(objs[key]))
                     print(listt)
             else:
                 print("** class doesn't exist **")
