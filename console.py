@@ -4,6 +4,7 @@ A module to define the console class
 which will be the frontend of the project
 """
 import cmd
+import shlex
 from models import storage
 
 
@@ -98,7 +99,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, line):
         """Update command to update attribute of an instance."""
-        args = line.split(" ")
+        args = shlex.split(line)
         if line == "" or line is None:
             print("** class name missing **")
         else:
