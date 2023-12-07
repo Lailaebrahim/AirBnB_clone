@@ -119,11 +119,12 @@ class HBNBCommand(cmd.Cmd):
                             if len(args) < 4:
                                 print("** value missing **")
                             else:
-                                for classes_key, attributes_dict in storage.attributes().items():
-                                    for attributes_key, attribute_type in attributes_dict.items():
-                                        if args[2] == attributes_key:
+                                search = storage.attributes().items()
+                                for classes_key, attr_dict in search:
+                                    for attr_key, attr_type in attr_dict.items():
+                                        if args[2] == attr_key:
                                             try:
-                                                args[3] = attribute_type(args[3])
+                                                args[3] = attr_type(args[3])
                                             except ValueError:
                                                 pass
                                 setattr(storage.all()[key], args[2], args[3])
