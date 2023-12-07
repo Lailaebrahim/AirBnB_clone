@@ -41,7 +41,22 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
-
+    def do_show(self, line):
+        """Show command to show data of an object."""
+        if line == "" or line is None:
+            print("** class name missing **")
+        else:
+            if line[0] not in storage.classes():
+                print("** class doesn't exist **")
+            else:
+                if line[1] == "" or line[1] is None:
+                    print("** instance id missing **")
+                else:
+                    key = line[0] + "." + line[1]
+                    if key in storage.all():
+                        print(storage.all()[key])
+                    else:
+                        print("** no instance found **")
 
 
 if __name__ == '__main__':
