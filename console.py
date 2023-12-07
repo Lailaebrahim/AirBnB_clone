@@ -50,7 +50,7 @@ class HBNBCommand(cmd.Cmd):
             if args[0] not in storage.classes():
                 print("** class doesn't exist **")
             else:
-                if args[1] == "" or len(args) < 2:
+                if len(args) < 2:
                     print("** instance id missing **")
                 else:
                     key = f"{args[0]}.{args[1]}"
