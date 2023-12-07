@@ -46,11 +46,11 @@ class HBNBCommand(cmd.Cmd):
         if line == "" or line is None:
             print("** class name missing **")
         else:
-            args = line.split()
+            args = line.split(" ")
             if args[0] not in storage.classes():
                 print("** class doesn't exist **")
             else:
-                if args[1] == "" or args(len) < 2:
+                if args[0] == "" or args(len) < 2:
                     print("** instance id missing **")
                 else:
                     key = f"{args[0]}.{args[1]}"
