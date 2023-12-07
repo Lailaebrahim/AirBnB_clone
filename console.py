@@ -64,7 +64,7 @@ class HBNBCommand(cmd.Cmd):
         args = line.split(" ")
         objs = storage.all()
         listt = []
-        if len(args) < 1:
+        if line == "":
             for key, value in objs.items():
                 listt.append(str(value))
             print(listt)
@@ -73,7 +73,7 @@ class HBNBCommand(cmd.Cmd):
                 for key, value in objs.items():
                     if args[0] == type(value).__name__:
                         listt.append(str(value))
-                    print(listt)
+                print(listt)
             else:
                 print("** class doesn't exist **")
 
