@@ -27,9 +27,11 @@ class BaseModel:
         if kwargs is not None and kwargs != {}:
             for key in kwargs:
                 if key == "created_at":
-                    self.__dict__["created_at"] = datetime.fromisoformat(kwargs["created_at"])
+                    self.__dict__["created_at"] = datetime.fromisoformat(
+                        kwargs["created_at"])
                 elif key == "updated_at":
-                    self.__dict__["updated_at"] = datetime.fromisoformat(kwargs["updated_at"])
+                    self.__dict__["updated_at"] = datetime.fromisoformat(
+                        kwargs["updated_at"])
                 else:
                     self.__dict__[key] = kwargs[key]
 
@@ -57,12 +59,13 @@ class BaseModel:
 
     def to_dict(self):
         """
-        Method to return the dictionary representation of the object
+        Method to return the dict representation of the obj
         Adding a new key/value __class__ that store the name of the class of obj
         And formatting the created_at and updated_at by ISO format for time.
         :return: A dictionary representation the object
+        .copy()
         """
-        my_dict = self.__dict__.copy()
+        my_dict = self.__dict__
         my_dict["__class__"] = type(self).__name__
         my_dict["created_at"] = my_dict["created_at"].isoformat()
         my_dict["updated_at"] = my_dict["updated_at"].isoformat()

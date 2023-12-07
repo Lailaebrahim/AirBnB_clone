@@ -31,11 +31,7 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, line):
-        """
-        Create an object of class defined by argument after the command.
-        :param line: A string for the parameters given to the command.
-        :return: No return
-        """
+        """Create command to create a new object."""
         if line in storage.classes():
             obj = storage.classes()[line]()
             obj.save()
@@ -44,6 +40,8 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         else:
             print("** class doesn't exist **")
+
+
 
 
 if __name__ == '__main__':
