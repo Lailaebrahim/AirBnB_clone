@@ -71,7 +71,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             if args[0] in storage.classes():
                 for key, value in objs.items():
-                    if value["__class__"] == args[0]:
+                    if args[0] == value.__class__:
                         listt.append(str(objs[key]))
                     print(listt)
             else:
