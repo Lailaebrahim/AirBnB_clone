@@ -60,7 +60,8 @@ class BaseModel:
     def to_dict(self):
         """
         Method to return the dict representation of the obj
-        Adding a new key/value __class__ that store the name of the class of obj
+        Adding a new key/value __class__ that store the name
+        of the class of obj
         And formatting the created_at and updated_at by ISO format for time.
         :return: A dictionary representation the object
         """
