@@ -64,15 +64,15 @@ class HBNBCommand(cmd.Cmd):
         args = line.split(" ")
         objs = storage.all()
         listt = []
-        if len(args) < 2:
+        if len(args) < 1:
             for key, value in objs.items():
-                listt.append(str(objs[key]))
+                listt.append(str(value))
             print(listt)
         else:
             if args[0] in storage.classes():
                 for key, value in objs.items():
                     if args[0] == type(value).__name__:
-                        listt.append(str(objs[key]))
+                        listt.append(str(value))
                     print(listt)
             else:
                 print("** class doesn't exist **")
