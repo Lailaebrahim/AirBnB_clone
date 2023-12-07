@@ -121,8 +121,8 @@ class HBNBCommand(cmd.Cmd):
                             else:
                                 search = storage.attributes().items()
                                 for classes_key, attr_dict in search:
-                                    for attr_key, attr_type in attr_dict.items():
-                                        if args[2] == attr_key:
+                                    for attr_k, attr_type in attr_dict.items():
+                                        if args[2] == attr_k:
                                             try:
                                                 args[3] = attr_type(args[3])
                                             except ValueError:
