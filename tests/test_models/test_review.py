@@ -85,7 +85,7 @@ class TestReviewModel(unittest.TestCase):
         dic["updated_at"] = datetime.now()
         obj = Review(dic)
         p = Place(id="222", created_at="2023-12-01T00:00:00",
-                  updated_at="2023-01-01T01:00:00" )
+                  updated_at="2023-01-01T01:00:00")
         us = User(id="111", created_at="2023-01-01T00:00:00",
                   updated_at="2023-01-01T01:00:00")
         obj.place_id = p.id

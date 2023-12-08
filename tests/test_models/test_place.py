@@ -53,7 +53,7 @@ class TestPlaceModel(unittest.TestCase):
         obj.price_by_night = 100
         obj.latitude = 1.1
         obj.longitude = 2.2
-        obj.amenity_ids = [am.id,]
+        obj.amenity_ids = [am.id, ]
         self.assertIsNotNone(obj.id)
         self.assertIs(type(obj.id), str)
         self.assertRegex(obj.id, '^[0-9a-f]{8}-[0-9a-f]{4}'
@@ -81,7 +81,7 @@ class TestPlaceModel(unittest.TestCase):
         self.assertIs(type(obj.latitude), float)
         self.assertEqual(obj.longitude, 2.2)
         self.assertIs(type(obj.longitude), float)
-        self.assertEqual(obj.amenity_ids, [am.id,])
+        self.assertEqual(obj.amenity_ids, [am.id, ])
         self.assertIs(type(obj.amenity_ids), list)
 
     def test_instantiation_with_args(self):
@@ -161,7 +161,6 @@ class TestPlaceModel(unittest.TestCase):
                         "'updated_at': datetime.datetime(2023, 1, 1, 1, 0), "
                         "'name': 'Laila'}")
         self.assertEqual(str(obj), expected_str)
-
 
     def test_to_dict(self):
         """Test serialization to a dictionary."""
