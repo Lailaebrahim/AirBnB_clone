@@ -119,7 +119,8 @@ class HBNBCommand(cmd.Cmd):
                             if len(args) < 4:
                                 print("** value missing **")
                             else:
-                                if args[2] in ["id", "created_at", "updated_at"]:
+                                l = ["id", "created_at", "updated_at"]
+                                if args[2] in l:
                                     return
                                 search = storage.attributes().items()
                                 for classes_key, attr_dict in search:
