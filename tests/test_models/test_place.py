@@ -123,6 +123,14 @@ class TestPlaceModel(unittest.TestCase):
         self.assertEqual(obj.max_guest, 2)
         self.assertIs(type(obj.max_guest), int)
 
+    def test_instantiation_with_wrong_args(self):
+        """test instantiation with wrong type args."""
+        obj = Place()
+        cpy = obj.to_dict()
+        cpy.update({1: 2})
+        with self.assertRaises(TypeError):
+            new = Place(**cpy)
+
     def test_instantiation_with_empty_args(self):
         """Test creation with empty dictionary."""
         obj = Place({})

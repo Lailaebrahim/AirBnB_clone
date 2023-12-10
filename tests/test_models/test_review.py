@@ -107,6 +107,14 @@ class TestReviewModel(unittest.TestCase):
         self.assertEqual(obj.text, "Good")
         self.assertIs(type(obj.text), str)
 
+    def test_instantiation_with_wrong_args(self):
+        """test instantiation with wrong type args."""
+        obj = Review()
+        cpy = obj.to_dict()
+        cpy.update({1: 2})
+        with self.assertRaises(TypeError):
+            new = Review(**cpy)
+
     def test_instantiation_with_empty_args(self):
         """Test creation with empty dictionary."""
         obj = Review({})

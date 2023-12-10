@@ -79,6 +79,14 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(obj.age, 21)
         self.assertIs(type(obj.age), int)
 
+    def test_instantiation_with_wrong_args(self):
+        """test instantiation with wrong type args."""
+        obj = BaseModel()
+        cpy = obj.to_dict()
+        cpy.update({1: 2})
+        with self.assertRaises(TypeError):
+            new = BaseModel(**cpy)
+
     def test_instantiation_with_empty_args(self):
         """Test creation with empty dictionary."""
         obj = BaseModel({})

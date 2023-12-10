@@ -84,6 +84,14 @@ class TestStateModel(unittest.TestCase):
         self.assertEqual(obj.email, "laila@gmail.com")
         self.assertIs(type(obj.email), str)
 
+    def test_instantiation_with_wrong_args(self):
+        """test instantiation with wrong type args."""
+        obj = State()
+        cpy = obj.to_dict()
+        cpy.update({1: 2})
+        with self.assertRaises(TypeError):
+            new = State(**cpy)
+
     def test_instantiation_with_empty_args(self):
         """Test creation with empty dictionary."""
         obj = State({})

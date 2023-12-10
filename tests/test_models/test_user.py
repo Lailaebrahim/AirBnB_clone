@@ -93,6 +93,14 @@ class TestUserModel(unittest.TestCase):
         self.assertEqual(obj.first_name, "Laila")
         self.assertIs(type(obj.first_name), str)
 
+    def test_instantiation_with_wrong_args(self):
+        """test instantiation with wrong type args."""
+        obj = User()
+        cpy = obj.to_dict()
+        cpy.update({1: 2})
+        with self.assertRaises(TypeError):
+            new = User(**cpy)
+
     def test_instantiation_with_empty_args(self):
         """Test creation with empty dictionary."""
         obj = User({})
