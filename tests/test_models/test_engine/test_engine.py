@@ -16,7 +16,7 @@ from models.state import State
 from models.user import User
 
 
-class TestAmenityModel(unittest.TestCase):
+class TestFileStorage(unittest.TestCase):
     """Test Case to test BaseModel"""
 
     def setUp(self):
