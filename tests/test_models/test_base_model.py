@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """
 Module to test BaseModel Class.
-import json
 """
 import os
 import time
@@ -29,12 +28,15 @@ class TestBaseModel(unittest.TestCase):
             os.remove("file.json")
 
     def test_id_is_public_attr(self):
+        """Test id is public attribute"""
         self.assertEqual(str, type(BaseModel().id))
 
     def test_created_at_is_public_attr(self):
+        """Test created_at is public attribute"""
         self.assertEqual(datetime, type(BaseModel().created_at))
 
     def test_updated_at_is_public_attr(self):
+        """Test updated_at is public attribute"""
         self.assertEqual(datetime, type(BaseModel().updated_at))
 
     def test_instantiation_without_args(self):
@@ -140,6 +142,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(str(obj), expected_str)
 
     def test_to_dict_type(self):
+        """test return type of to_dict method."""
         obj = BaseModel()
         self.assertTrue(dict, type(obj.to_dict()))
 
