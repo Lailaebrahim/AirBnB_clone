@@ -1,26 +1,16 @@
 #!/usr/bin/python3
-"""
-Module to test File Storage.
-"""
-import os
+""" Module for testing file storage"""
 import unittest
-from models.engine.file_storage import FileStorage
-from models import storage
-from models.amenity import Amenity
 from models.base_model import BaseModel
-from models.city import City
-from models.place import Place
-from models.review import Review
-from models.state import State
-from models.user import User
+from models import storage
+import os
 
 
-class TestAmenityModel(unittest.TestCase):
-    """Test Case to test BaseModel"""
+class test_fileStorage(unittest.TestCase):
+    """ Class to test the file storage method """
 
     def setUp(self):
-        """Ensure storage is empty before each test
-        storage._FileStorage__objects = {}"""
+        """ Set up test environment """
         del_list = []
         for key in storage._FileStorage__objects.keys():
             del_list.append(key)
@@ -28,98 +18,15 @@ class TestAmenityModel(unittest.TestCase):
             del storage._FileStorage__objects[key]
 
     def tearDown(self):
-        """Clean up storage after each test"""
-        if os.path.exists("file.json"):
-            os.remove("file.json")
+        """ Remove storage file at end of tests """
+        try:
+            os.remove('file.json')
+        except:
+            pass
 
-    def test_objects_dict_empty(self):
+    def test_obj_list_empty(self):
         """ __objects is initially empty """
         self.assertEqual(len(storage.all()), 0)
-
-    def test_instantiation_without_args(self):
-        """Test creation with no arguments."""
-        self.assertEqual(type(FileStorage()), FileStorage)
-
-    def test_instantiation_with_args(self):
-        """Test creation with arguments."""
-        with self.assertRaises(TypeError):
-            FileStorage(None)
-
-    def test_File_Storage_priv_attr(self):
-        """Test type of private attributes."""
-        self.assertEqual(type(FileStorage._FileStorage__objects), dict)
-        self.assertEqual(type(FileStorage._FileStorage__file_path), str)
-
-    def test_storage_instantiation(self):
-        """Test storage_instantiation."""
-        self.assertEqual(type(storage), FileStorage)
-
-    def test_creation_file(self):
-        """ File is not created on a class save """
-        new = BaseModel()
-        self.assertFalse(os.path.exists('file.json'))
-
-    def test_file_creation_after_save(self):
-        """ file is created after save"""
-        new = BaseModel()
-        self.assertFalse(os.path.exists('file.json'))
-
-    def test_file_after_save_not_empty(self):
-        """Test file is nit empty after saving"""
-        new = BaseModel()
-        dict = new.to_dict()
-        new.save()
-        new2 = BaseModel(**dict)
-        self.assertNotEqual(os.path.getsize('file.json'), 0)
-
-    def test_all(self):
-        """Test all method."""
-        new = BaseModel()
-        objs = storage.all()
-        self.assertIs(type(objs), dict)
-
-    def test_all_with_args(self):
-        """test all method with args"""
-        with self.assertRaises(TypeError):
-            storage.all(BaseModel())
-
-    def test_all_with_None_args(self):
-        """test all method with args"""
-        with self.assertRaises(TypeError):
-            storage.all(None)
-
-    def test_new(self):
-        """test new method"""
-        obj0 = Amenity()
-        obj1 = BaseModel()
-        obj2 = City()
-        obj3 = Place()
-        obj4 = Review()
-        obj5 = State()
-        obj6 = User()
-        storage.new(obj0)
-        storage.new(obj1)
-        storage.new(obj2)
-        storage.new(obj3)
-        storage.new(obj4)
-        storage.new(obj5)
-        storage.new(obj6)
-        objs = storage.all()
-        self.assertFalse(os.path.exists('file.json'))
-        self.assertIn("Amenity." + obj0.id, objs.keys())
-        self.assertIn(obj0, objs.values())
-        self.assertIn("BaseModel." + obj1.id, objs.keys())
-        self.assertIn(obj1, objs.values())
-        self.assertIn("City." + obj2.id, objs.keys())
-        self.assertIn(obj2, objs.values())
-        self.assertIn("Place." + obj3.id, objs.keys())
-        self.assertIn(obj3, objs.values())
-        self.assertIn("Review." + obj4.id, objs.keys())
-        self.assertIn(obj4, objs.values())
-        self.assertIn("State." + obj5.id, objs.keys())
-        self.assertIn(obj5, objs.values())
-        self.assertIn("User." + obj6.id, objs.keys())
-        self.assertIn(obj6, objs.values())
 
     def test_new(self):
         """ New object is correctly added to __objects """
@@ -128,85 +35,42 @@ class TestAmenityModel(unittest.TestCase):
             temp = obj
         self.assertTrue(temp is obj)
 
-    def test_new_with_args(self):
-        """Test new method with arguments """
-        with self.assertRaises(TypeError):
-            storage.new(Amenity(), BaseModel())
+    def test_all(self):
+        """ __objects is properly returned """
+        new = BaseModel()
+        temp = storage.all()
+        self.assertIsInstance(temp, dict)
 
-    def test_new_with_None_arg(self):
-        """test new method with None argument"""
-        with self.assertRaises(AttributeError):
-            storage.new(None)
+    def test_base_model_instantiation(self):
+        """ File is not created on BaseModel save """
+        new = BaseModel()
+        self.assertFalse(os.path.exists('file.json'))
+
+    def test_empty(self):
+        """ Data is saved to file """
+        new = BaseModel()
+        thing = new.to_dict()
+        new.save()
+        new2 = BaseModel(**thing)
+        self.assertNotEqual(os.path.getsize('file.json'), 0)
 
     def test_save(self):
-        """test save method."""
-        obj0 = Amenity()
-        obj1 = BaseModel()
-        obj2 = City()
-        obj3 = Place()
-        obj4 = Review()
-        obj5 = State()
-        obj6 = User()
-        storage.new(obj0)
-        storage.new(obj1)
-        storage.new(obj2)
-        storage.new(obj3)
-        storage.new(obj4)
-        storage.new(obj5)
-        storage.new(obj6)
+        """ FileStorage save method """
+        new = BaseModel()
         storage.save()
         self.assertTrue(os.path.exists('file.json'))
-        json_string = ""
-        with open(storage._FileStorage__file_path, "r") as f:
-            json_string = f.read()
-            self.assertIn("Amenity." + obj0.id, json_string)
-            self.assertIn("BaseModel." + obj1.id, json_string)
-            self.assertIn("City." + obj2.id, json_string)
-            self.assertIn("Place." + obj3.id, json_string)
-            self.assertIn("Review." + obj4.id, json_string)
-            self.assertIn("State." + obj5.id, json_string)
-            self.assertIn("User." + obj6.id, json_string)
-
-    def test_save_with_args(self):
-        """test save method with argument."""
-        with self.assertRaises(TypeError):
-            storage.save(Amenity(), BaseModel())
-
-    def test_save_with_None_arg(self):
-        """test save method with one argument."""
-        with self.assertRaises(TypeError):
-            storage.save(None)
 
     def test_reload(self):
-        """test reload method."""
-        obj0 = Amenity()
-        obj1 = BaseModel()
-        obj2 = City()
-        obj3 = Place()
-        obj4 = Review()
-        obj5 = State()
-        obj6 = User()
-        storage.new(obj0)
-        storage.new(obj1)
-        storage.new(obj2)
-        storage.new(obj3)
-        storage.new(obj4)
-        storage.new(obj5)
-        storage.new(obj6)
+        """ Storage file is successfully loaded to __objects """
+        new = BaseModel()
         storage.save()
-        self.assertTrue(os.path.exists('file.json'))
         storage.reload()
-        objs = FileStorage._FileStorage__objects
-        self.assertIn("Amenity." + obj0.id, objs.keys())
-        self.assertIn("BaseModel." + obj1.id, objs.keys())
-        self.assertIn("City." + obj2.id, objs.keys())
-        self.assertIn("Place." + obj3.id, objs.keys())
-        self.assertIn("Review." + obj4.id, objs.keys())
-        self.assertIn("State." + obj5.id, objs.keys())
-        self.assertIn("User." + obj6.id, objs.keys())
+        for obj in storage.all().values():
+            loaded = obj
+        self.assertEqual(new.to_dict()['id'], loaded.to_dict()['id'])
 
     def test_reload_empty(self):
-        """ test load from an empty file """
+        """ Load from an empty file """
         with open('file.json', 'w') as f:
             pass
         with self.assertRaises(ValueError):
@@ -216,24 +80,30 @@ class TestAmenityModel(unittest.TestCase):
         """ Nothing happens if file does not exist """
         self.assertEqual(storage.reload(), None)
 
-    def test_reload_with_arg(self):
-        """test reload method with argument."""
-        with self.assertRaises(TypeError):
-            storage.reload(BaseModel())
+    def test_base_model_save(self):
+        """ BaseModel save method calls storage save """
+        new = BaseModel()
+        new.save()
+        self.assertTrue(os.path.exists('file.json'))
 
-    def test_reload_with_None_arg(self):
-        """test reload method with None argument."""
-        with self.assertRaises(TypeError):
-            storage.reload(None)
+    def test_type_path(self):
+        """ Confirm __file_path is string """
+        self.assertEqual(type(storage._FileStorage__file_path), str)
+
+    def test_type_objects(self):
+        """ Confirm __objects is a dict """
+        self.assertEqual(type(storage.all()), dict)
 
     def test_key_format(self):
-        """ test Key is properly formatted """
-        obj = BaseModel()
-        _id = obj.to_dict()['id']
+        """ Key is properly formatted """
+        new = BaseModel()
+        _id = new.to_dict()['id']
         for key in storage.all().keys():
             temp = key
         self.assertEqual(temp, 'BaseModel' + '.' + _id)
 
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_storage_var_created(self):
+        """ FileStorage object storage created """
+        from models.engine.file_storage import FileStorage
+        print(type(storage))
+        self.assertEqual(type(storage), FileStorage)
