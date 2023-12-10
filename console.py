@@ -3,6 +3,7 @@
 A module to define the console class
 which will be the frontend of the project
 """
+import re
 import cmd
 import shlex
 from models import storage
@@ -13,6 +14,24 @@ class HBNBCommand(cmd.Cmd):
     A Class that represent the Frontend of project
     """
     prompt = "(hbnb) "
+
+    def precmd(self, line):
+        """overriding function to change command line"""
+        match = re.search(r"^(\w*)\.(\w+)(?:\(([^)]*)\))$", line)
+        if not match:
+            return line
+        classname = match.group(1)
+        command = match.group(2)
+        args = match.group(3)
+        match_id_and_args = re.search('^"([^"]*)"(?:, (.*))?$', args)
+        if match_id_and_args:
+            id = match_id_and_args.group(1)
+            attr_or_dict = match_id_and_args.group(2)
+        else:
+            id = args
+
+        line = command + " " + classname + " " + id + " "
+        return cmd.Cmd.precmd(self, line)
 
     def do_EOF(self, line):
         """Exit the program when EOF is encountered."""
@@ -132,6 +151,21 @@ class HBNBCommand(cmd.Cmd):
                                                 pass
                                 setattr(storage.all()[key], args[2], args[3])
                                 storage.all()[key].save()
+
+    def do_count(self, line):
+        """Count command to count no. of objs of a class."""
+        args = line.split(" ")
+        if line == "" or line is None:
+            print("** class name missing **")
+        else:
+            if args[0] not in storage.classes():
+                print("** class doesn't exist **")
+            else:
+                count = 0
+                for key, value in storage.all().items():
+                    if args[0] == key.split('.')[0]:
+                        count += 1
+        print(count)
 
 
 if __name__ == '__main__':
