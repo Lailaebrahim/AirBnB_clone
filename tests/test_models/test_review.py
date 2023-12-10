@@ -18,7 +18,11 @@ class TestReviewModel(unittest.TestCase):
 
     def setUp(self):
         """Ensure storage is empty before each test"""
-        storage._FileStorage__objects = {}
+        del_list = []
+        for key in storage._FileStorage__objects.keys():
+            del_list.append(key)
+        for key in del_list:
+            del storage._FileStorage__objects[key]
 
     def tearDown(self):
         """Clean up storage after each test"""
