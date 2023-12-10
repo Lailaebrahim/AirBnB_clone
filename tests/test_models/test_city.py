@@ -15,11 +15,11 @@ class TestCityModel(unittest.TestCase):
     """Test Case to test BaseModel"""
 
     def setUp(self):
-        # Ensure storage is empty before each test
+        """Ensure storage is empty before each test"""
         storage._FileStorage__objects = {}
 
     def tearDown(self):
-        # Clean up storage after each test
+        """Clean up storage after each test"""
         if os.path.exists("file.json"):
             os.remove("file.json")
 
@@ -143,6 +143,7 @@ class TestCityModel(unittest.TestCase):
         self.assertEqual(dic_obj["created_at"], obj.created_at.isoformat())
 
     def test_to_dict_with_dict(self):
+        """Test to dict method."""
         obj = City()
         self.assertNotEqual(obj.to_dict(), obj.__dict__)
 
@@ -168,6 +169,7 @@ class TestCityModel(unittest.TestCase):
         self.assertNotEqual(second_update_at, initial_updated_at)
 
     def test_save_updates_file(self):
+        """test that save method updates the file"""
         obj = City()
         obj.save()
         obj_id = "City." + obj.id
@@ -175,6 +177,7 @@ class TestCityModel(unittest.TestCase):
             self.assertIn(obj_id, f.read())
 
     def test_save_with_arg(self):
+        """test save method with arguments"""
         obj = City()
         with self.assertRaises(TypeError):
             obj.save(None)

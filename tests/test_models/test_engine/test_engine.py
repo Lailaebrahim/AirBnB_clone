@@ -35,21 +35,31 @@ class TestAmenityModel(unittest.TestCase):
         self.assertEqual(type(FileStorage()), FileStorage)
 
     def test_instantiation_with_args(self):
+        """Test creation with arguments."""
         with self.assertRaises(TypeError):
             FileStorage(None)
 
     def test_File_Storage_priv_attr(self):
+        """Test type of private attributes."""
         self.assertEqual(type(FileStorage._FileStorage__objects), dict)
         self.assertEqual(type(FileStorage._FileStorage__file_path), str)
 
     def test_storage_instantiation(self):
+        """Test storage_instantiation."""
         self.assertEqual(type(storage), FileStorage)
 
     def test_all(self):
+        """Test all method."""
         objs = storage.all()
         self.assertIs(type(objs), dict)
 
     def test_all_with_args(self):
+        """test all method with args"""
+        with self.assertRaises(TypeError):
+            storage.all(BaseModel())
+
+    def test_all_with_None_args(self):
+        """test all method with args"""
         with self.assertRaises(TypeError):
             storage.all(None)
 

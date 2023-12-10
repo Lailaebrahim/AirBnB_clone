@@ -16,11 +16,11 @@ class TestBaseModel(unittest.TestCase):
     """Test Case to test BaseModel"""
 
     def setUp(self):
-        # Ensure storage is empty before each test
+        """Ensure storage is empty before each test"""
         storage._FileStorage__objects = {}
 
     def tearDown(self):
-        # Clean up storage after each test
+        """Clean up storage after each test"""
         if os.path.exists("file.json"):
             os.remove("file.json")
 
@@ -138,6 +138,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(dic_obj["created_at"], obj.created_at.isoformat())
 
     def test_to_dict_with_dict(self):
+        """test to dict method"""
         obj = BaseModel()
         self.assertNotEqual(obj.to_dict(), obj.__dict__)
 
@@ -163,6 +164,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertNotEqual(second_update_at, initial_updated_at)
 
     def test_save_updates_file(self):
+        """test that save method updates the file"""
         obj = BaseModel()
         obj.save()
         obj_id = "BaseModel." + obj.id
@@ -170,6 +172,7 @@ class TestBaseModel(unittest.TestCase):
             self.assertIn(obj_id, f.read())
 
     def test_save_with_arg(self):
+        """test save method with arguments"""
         obj = BaseModel()
         with self.assertRaises(TypeError):
             obj.save(None)
