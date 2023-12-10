@@ -89,6 +89,7 @@ class TestAmenityModel(unittest.TestCase):
             storage.all(None)
 
     def test_new(self):
+        """test new method"""
         obj0 = Amenity()
         obj1 = BaseModel()
         obj2 = City()
@@ -127,14 +128,17 @@ class TestAmenityModel(unittest.TestCase):
         self.assertTrue(temp is obj)
 
     def test_new_with_args(self):
+        """Test new method with arguments """
         with self.assertRaises(TypeError):
             storage.new(Amenity(), BaseModel())
 
     def test_new_with_None_arg(self):
+        """test new method with None argument"""
         with self.assertRaises(AttributeError):
             storage.new(None)
 
     def test_save(self):
+        """test save method."""
         obj0 = Amenity()
         obj1 = BaseModel()
         obj2 = City()
@@ -162,14 +166,17 @@ class TestAmenityModel(unittest.TestCase):
             self.assertIn("User." + obj6.id, json_string)
 
     def test_save_with_args(self):
+        """test save method with argument."""
         with self.assertRaises(TypeError):
             storage.save(Amenity(), BaseModel())
 
     def test_save_with_None_arg(self):
+        """test save method with one argument."""
         with self.assertRaises(TypeError):
             storage.save(None)
 
     def test_reload(self):
+        """test reload method."""
         obj0 = Amenity()
         obj1 = BaseModel()
         obj2 = City()
@@ -195,11 +202,20 @@ class TestAmenityModel(unittest.TestCase):
         self.assertIn("State." + obj5.id, objs.keys())
         self.assertIn("User." + obj6.id, objs.keys())
 
+    def test_reload_empty(self):
+        """ test load from an empty file """
+        with open('file.json', 'w') as f:
+            pass
+        with self.assertRaises(ValueError):
+            storage.reload()
+
     def test_reload_with_arg(self):
+        """test reload method with argument."""
         with self.assertRaises(TypeError):
             storage.reload(BaseModel())
 
     def test_reload_with_None_arg(self):
+        """test reload method with None argument."""
         with self.assertRaises(TypeError):
             storage.reload(None)
 
