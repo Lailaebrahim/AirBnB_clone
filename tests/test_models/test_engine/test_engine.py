@@ -51,9 +51,12 @@ class TestAmenityModel(unittest.TestCase):
         with self.assertRaises(TypeError):
             FileStorage(None)
 
-    def test_File_Storage_priv_attr(self):
+    def test_File_Storage_objects_priv_attr(self):
         """Test type of private attributes."""
         self.assertEqual(type(FileStorage._FileStorage__objects), dict)
+
+    def test_File_Storage_file_path_priv_attr(self):
+        """Test type of private attributes."""
         self.assertEqual(type(FileStorage._FileStorage__file_path), str)
 
     def test_storage_instantiation(self):
