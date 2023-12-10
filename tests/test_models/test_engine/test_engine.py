@@ -19,13 +19,17 @@ class TestAmenityModel(unittest.TestCase):
     """Test Case to test BaseModel"""
 
     def setUp(self):
-        # Ensure storage is empty before each test
+        """Ensure storage is empty before each test"""
         storage._FileStorage__objects = {}
 
     def tearDown(self):
-        # Clean up storage after each test
+        """Clean up storage after each test"""
         if os.path.exists("file.json"):
             os.remove("file.json")
+
+    def test_objects_dict_empty(self):
+        """ __objects is initially empty """
+        self.assertEqual(len(storage.all()), 3)
 
     def test_instantiation_without_args(self):
         """Test creation with no arguments."""
