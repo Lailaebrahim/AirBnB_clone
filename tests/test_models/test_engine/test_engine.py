@@ -3,10 +3,7 @@
 Module to test File Storage.
 """
 import os
-import time
-import uuid
 import unittest
-from datetime import datetime
 from models.engine.file_storage import FileStorage
 from models import storage
 from models.amenity import Amenity
