@@ -71,7 +71,8 @@ class TestFileStorage(unittest.TestCase):
     def test_file_creation_after_save(self):
         """ file is created after save"""
         new = BaseModel()
-        self.assertFalse(os.path.exists('file.json'))
+        storage.save()
+        self.assertTrue(os.path.exists('file.json'))
 
     def test_file_after_save_not_empty(self):
         """Test file is not empty after saving"""
