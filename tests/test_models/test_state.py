@@ -213,3 +213,7 @@ class TestStateModel(unittest.TestCase):
         self.assertNotEqual(obj1.id, obj2.id)
         self.assertNotEqual(obj1.created_at, obj2.created_at)
         self.assertNotEqual(obj1.updated_at, obj2.updated_at)
+
+
+if __name__ == '__main__':
+    unittest.main()
