@@ -24,6 +24,15 @@ class TestBaseModel(unittest.TestCase):
         if os.path.exists("file.json"):
             os.remove("file.json")
 
+    def test_id_is_public_attr(self):
+        self.assertEqual(str, type(BaseModel().id))
+
+    def test_created_at_is_public_attr(self):
+        self.assertEqual(datetime, type(BaseModel().created_at))
+
+    def test_updated_at_is_public_attr(self):
+        self.assertEqual(datetime, type(BaseModel().updated_at))
+
     def test_instantiation_without_args(self):
         """Test creation with no arguments."""
         obj = BaseModel()
@@ -31,6 +40,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertIs(type(obj.id), str)
         self.assertIs(type(obj.created_at), datetime)
         self.assertIs(type(obj.updated_at), datetime)
+        self.assertEqual(BaseModel, type(obj))
 
     def test_instantiation_without_args_with_new_attr(self):
         """Test creation with no arguments then add new attributes."""
@@ -54,6 +64,9 @@ class TestBaseModel(unittest.TestCase):
         dic["updated_at"] = datetime.now()
         obj = BaseModel(dic)
         self.assertIsNotNone(obj.id)
+        self.assertRegex(obj.id, '^[0-9a-f]{8}-[0-9a-f]{4}'
+                                 '-[0-9a-f]{4}-[0-9a-f]{4}'
+                                 '-[0-9a-f]{12}$')
         self.assertIs(type(obj.id), str)
         self.assertIs(type(obj.created_at), datetime)
         self.assertIs(type(obj.updated_at), datetime)
@@ -91,6 +104,9 @@ class TestBaseModel(unittest.TestCase):
         """Test creation with empty dictionary."""
         obj = BaseModel({})
         self.assertIsNotNone(obj.id)
+        self.assertRegex(obj.id, '^[0-9a-f]{8}-[0-9a-f]{4}'
+                                 '-[0-9a-f]{4}-[0-9a-f]{4}'
+                                 '-[0-9a-f]{12}$')
         self.assertIs(type(obj.id), str)
         self.assertIs(type(obj.created_at), datetime)
         self.assertIs(type(obj.updated_at), datetime)
@@ -119,6 +135,10 @@ class TestBaseModel(unittest.TestCase):
                         "'updated_at': datetime.datetime(2023, 1, 1, 1, 0)}")
         self.assertEqual(str(obj), expected_str)
 
+    def test_to_dict_type(self):
+        obj = BaseModel()
+        self.assertTrue(dict, type(obj.to_dict()))
+
     def test_to_dict(self):
         """Test serialization to a dictionary."""
         obj = BaseModel(id="789", created_at="2023-01-01T00:00:00",
@@ -134,8 +154,20 @@ class TestBaseModel(unittest.TestCase):
             'age': 21
         }
         self.assertEqual(obj.to_dict(), expected_dict)
+        self.assertIn("id", obj.to_dict())
+        self.assertIn("created_at", obj.to_dict())
+        self.assertIn("updated_at", obj.to_dict())
+        self.assertIn("__class__", obj.to_dict())
 
-    def test_return_to_ict(self):
+    def test_to_dict_with_new_attr(self):
+        """Test to dict and new added attributes."""
+        obj = BaseModel()
+        obj.name = "laila"
+        obj.age = 21
+        self.assertIn("name", obj.to_dict())
+        self.assertIn("age", obj.to_dict())
+
+    def test_return_to_dict(self):
         """Test Values returned from to_dict """
         obj = BaseModel()
         dic_obj = obj.to_dict()
@@ -149,6 +181,12 @@ class TestBaseModel(unittest.TestCase):
         """test to dict method"""
         obj = BaseModel()
         self.assertNotEqual(obj.to_dict(), obj.__dict__)
+
+    def test_to_dict_with_None_arg(self):
+        """test to dict with None arg."""
+        obj = BaseModel()
+        with self.assertRaises(TypeError):
+            obj.to_dict(None)
 
     def test_save(self):
         """Test saving tto json file."""
@@ -165,11 +203,13 @@ class TestBaseModel(unittest.TestCase):
         time.sleep(1e-4)
         obj.save()
         self.assertNotEqual(initial_updated_at, obj.updated_at)
+        self.assertLess(initial_updated_at, obj.updated_at)
         second_update_at = obj.updated_at
         time.sleep(1e-4)
         obj.save()
         self.assertNotEqual(second_update_at, obj.updated_at)
         self.assertNotEqual(second_update_at, initial_updated_at)
+        self.assertLess(initial_updated_at, second_update_at)
 
     def test_save_updates_file(self):
         """test that save method updates the file"""
