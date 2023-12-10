@@ -105,6 +105,7 @@ class TestAmenityModel(unittest.TestCase):
         storage.new(obj5)
         storage.new(obj6)
         objs = storage.all()
+        self.assertFalse(os.path.exists('file.json'))
         self.assertIn("Amenity." + obj0.id, objs.keys())
         self.assertIn(obj0, objs.values())
         self.assertIn("BaseModel." + obj1.id, objs.keys())
@@ -154,6 +155,7 @@ class TestAmenityModel(unittest.TestCase):
         storage.new(obj5)
         storage.new(obj6)
         storage.save()
+        self.assertTrue(os.path.exists('file.json'))
         json_string = ""
         with open(storage._FileStorage__file_path, "r") as f:
             json_string = f.read()
@@ -192,6 +194,7 @@ class TestAmenityModel(unittest.TestCase):
         storage.new(obj5)
         storage.new(obj6)
         storage.save()
+        self.assertTrue(os.path.exists('file.json'))
         storage.reload()
         objs = FileStorage._FileStorage__objects
         self.assertIn("Amenity." + obj0.id, objs.keys())
@@ -209,6 +212,10 @@ class TestAmenityModel(unittest.TestCase):
         with self.assertRaises(ValueError):
             storage.reload()
 
+    def test_reload_from_nonexistent(self):
+        """ Nothing happens if file does not exist """
+        self.assertEqual(storage.reload(), None)
+
     def test_reload_with_arg(self):
         """test reload method with argument."""
         with self.assertRaises(TypeError):
@@ -218,6 +225,14 @@ class TestAmenityModel(unittest.TestCase):
         """test reload method with None argument."""
         with self.assertRaises(TypeError):
             storage.reload(None)
+
+    def test_key_format(self):
+        """ test Key is properly formatted """
+        obj = BaseModel()
+        _id = obj.to_dict()['id']
+        for key in storage.all().keys():
+            temp = key
+        self.assertEqual(temp, 'BaseModel' + '.' + _id)
 
 
 if __name__ == '__main__':
