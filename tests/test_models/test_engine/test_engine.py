@@ -27,7 +27,6 @@ class TestAmenityModel(unittest.TestCase):
         for key in del_list:
             del storage._FileStorage__objects[key]
 
-
     def tearDown(self):
         """Clean up storage after each test"""
         if os.path.exists("file.json"):
@@ -55,8 +54,27 @@ class TestAmenityModel(unittest.TestCase):
         """Test storage_instantiation."""
         self.assertEqual(type(storage), FileStorage)
 
+    def test_creation_file(self):
+        """ File is not created on a class save """
+        new = BaseModel()
+        self.assertFalse(os.path.exists('file.json'))
+
+    def test_file_creation_after_save(self):
+        """ file is created after save"""
+        new = BaseModel()
+        self.assertFalse(os.path.exists('file.json'))
+
+    def test_file_after_save_not_empty(self):
+        """Test file is nit empty after saving"""
+        new = BaseModel()
+        dict = new.to_dict()
+        new.save()
+        new2 = BaseModel(**dict)
+        self.assertNotEqual(os.path.getsize('file.json'), 0)
+
     def test_all(self):
         """Test all method."""
+        new = BaseModel()
         objs = storage.all()
         self.assertIs(type(objs), dict)
 
@@ -70,7 +88,7 @@ class TestAmenityModel(unittest.TestCase):
         with self.assertRaises(TypeError):
             storage.all(None)
 
-    def test_save(self):
+    def test_new(self):
         obj0 = Amenity()
         obj1 = BaseModel()
         obj2 = City()
@@ -101,11 +119,18 @@ class TestAmenityModel(unittest.TestCase):
         self.assertIn("User." + obj6.id, objs.keys())
         self.assertIn(obj6, objs.values())
 
+    def test_new(self):
+        """ New object is correctly added to __objects """
+        new = BaseModel()
+        for obj in storage.all().values():
+            temp = obj
+        self.assertTrue(temp is obj)
+
     def test_new_with_args(self):
         with self.assertRaises(TypeError):
             storage.new(Amenity(), BaseModel())
 
-    def test_with_None_arg(self):
+    def test_new_with_None_arg(self):
         with self.assertRaises(AttributeError):
             storage.new(None)
 
