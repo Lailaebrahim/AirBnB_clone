@@ -37,7 +37,7 @@ class TestFileStorage(unittest.TestCase):
         """ __objects is initially empty """
         self.assertEqual(len(storage.all()), 0)
 
-    def test_instantiation_without_args(self):
+    def test_instantiation(self):
         """Test creation with no arguments."""
         self.assertEqual(type(FileStorage()), FileStorage)
 
@@ -54,6 +54,8 @@ class TestFileStorage(unittest.TestCase):
     def test_File_Storage_objects_priv_attr(self):
         """Test type of private attributes."""
         self.assertEqual(type(FileStorage._FileStorage__objects), dict)
+        self.assertEqual(FileStorage._FileStorage__file_path,
+                         "file.json")
 
     def test_File_Storage_file_path_priv_attr(self):
         """Test type of private attributes."""
@@ -275,6 +277,89 @@ class TestFileStorage(unittest.TestCase):
         for key in storage.all().keys():
             temp = key
         self.assertEqual(temp, 'BaseModel' + '.' + _id)
+
+    def test_save_with_no_objs(self):
+        """No raised error in saving with no objects"""
+        storage.save()
+
+    def test_save_and_reload_all_methods(self):
+        """Ensure that save and reload methods work together"""
+        model = BaseModel()
+        storage.new(model)
+        storage.save()
+        storage.reload()
+        key = f"BaseModel.{model.id}"
+        reloaded_model = storage.all().get(key)
+        self.assertIsNotNone(reloaded_model)
+        self.assertEqual(reloaded_model.to_dict(), model.to_dict())
+
+    def test_save_reload_many_objs(self):
+        """test saving and reloading multiple objects """
+        model1 = BaseModel()
+        model2 = BaseModel()
+        key1 = f"BaseModel.{model1.id}"
+        key2 = f"BaseModel.{model2.id}"
+
+        storage.new(model1)
+        storage.new(model2)
+        storage.save()
+        storage.reload()
+
+        reloaded_models = storage.all()
+        self.assertIn(key1, reloaded_models)
+        self.assertIn(key2, reloaded_models)
+        self.assertEqual(reloaded_models[key1].to_dict(), model1.to_dict())
+        self.assertEqual(reloaded_models[key2].to_dict(), model2.to_dict())
+
+    def test_save_and_reload_empty_objects(self):
+        """Test saving and
+        reloading when __objects is empty works"""
+        storage.save()  # This should not raise an error
+        storage.reload()  # This should not raise an error
+
+    def test_save_and_reload_with_existing_file(self):
+        """test saving and reloading with an existing file."""
+        obj = BaseModel()
+        key = f"BaseModel.{obj.id}"
+
+        storage.new(obj)
+        storage.save()
+
+        # Create a new FileStorage instance to simulate a different session
+        new_file_storage = FileStorage()
+        new_file_storage.reload()
+
+        reloaded_model = new_file_storage.all().get(key)
+        self.assertIsNotNone(reloaded_model)
+        self.assertEqual(reloaded_model.to_dict(), obj.to_dict())
+
+    def test_save_and_reload_with_existing_file_content(self):
+        """saving and reloading
+        with an existing file and content works"""
+        # Create an initial BaseModel instance and save it to file
+        obj1 = BaseModel()
+        key1 = f"BaseModel.{obj1.id}"
+        storage.new(obj1)
+        storage.save()
+
+        # Create a new FileStorage instance and reload from the existing file
+        new_file_storage = FileStorage()
+        new_file_storage.reload()
+
+        # Create a new BaseModel instance and save it to the same file
+        obj2 = BaseModel()
+        key2 = f"BaseModel.{obj2.id}"
+        new_file_storage.new(obj2)
+        new_file_storage.save()
+
+        # Reload the file again and check if both instances are present
+        new_file_storage.reload()
+        reloaded_models = new_file_storage.all()
+
+        self.assertIn(key1, reloaded_models)
+        self.assertIn(key2, reloaded_models)
+        self.assertEqual(reloaded_models[key1].to_dict(), obj1.to_dict())
+        self.assertEqual(reloaded_models[key2].to_dict(), obj2.to_dict())
 
 
 if __name__ == '__main__':
